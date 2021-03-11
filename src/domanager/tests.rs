@@ -229,7 +229,7 @@ fn test_ssh_key() {
 #[test]
 fn test_ssh_keys() {
     // Testing multiple responses here to ensure that the paged response API gets covered.
-    
+
     let server = MockServer::start();
 
     let response1_json =

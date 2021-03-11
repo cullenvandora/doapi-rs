@@ -3,6 +3,7 @@ use std::marker::PhantomData;
 
 use reqwest::Method;
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 use url::Url;
 
 use crate::response::{self, NamedResponse, NotArray, RawPagedResponse};
@@ -25,19 +26,27 @@ impl<'a, 't, T> RequestBuilder<'a, 't, T> {
         self.body = Some(body);
         self
     }
-}
 
-impl<'a, 't, T> RequestBuilder<'a, 't, T> {
-    pub fn new(domgr: &'t DoManager<'a>, path: &str) -> RequestBuilder<'a, 't, T> {
-        RequestBuilder {
-            domgr,
-            method: Method::GET,
-            url: domgr.endpoint_url.join(path).unwrap(),
-            resp_t: PhantomData,
-            body: None,
-        }
+    pub fn json<O>(mut self, obj: &O) -> Self
+    where
+        O: Serialize + ?Sized,
+    {
+        self.body = serde_json::to_string(obj).ok();
+        self
     }
 }
+
+// impl<'a, 't, T> RequestBuilder<'a, 't, T> {
+//     pub fn new(domgr: &'t DoManager<'a>, path: &str) -> RequestBuilder<'a, 't, T> {
+//         RequestBuilder {
+//             domgr,
+//             method: Method::GET,
+//             url: domgr.endpoint_url.join(path).unwrap(),
+//             resp_t: PhantomData,
+//             body: None,
+//         }
+//     }
+// }
 
 // impl<'t, T> fmt::Display for RequestBuilder<'t, T> {
 //     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

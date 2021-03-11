@@ -1,3 +1,5 @@
+use reqwest::Method;
+
 use crate::request::{DoRequest, RequestBuilder};
 use crate::response;
 
@@ -20,9 +22,15 @@ impl<'a, 't> RequestBuilder<'a, 't, response::Account> {
     ///     Err(e)     => println!("Error: {}", e)
     /// }
     /// ```
-    pub fn action(self, id: &str) -> RequestBuilder<'a, 't, response::Action> {
+    pub fn action(&'a self, id: &str) -> RequestBuilder<'a, 't, response::Action> {
         // https://api.digitalocean.com/v2/actions/$ID
-        RequestBuilder::new(self.domgr, &format!("actions/{}", id))
+        let url = self
+            .domgr
+            .endpoint_url
+            .clone()
+            .join(&format!("actions/{}", id))
+            .unwrap();
+        self.domgr.request_builder(Method::GET, url)
     }
 
     /// A type of `RequestBuilder` that lets you make requests for multiple actions or the concept
@@ -40,8 +48,9 @@ impl<'a, 't> RequestBuilder<'a, 't, response::Account> {
     ///     Err(e)     => println!("Error: {}", e)
     /// }
     /// ```
-    pub fn actions(self) -> RequestBuilder<'a, 't, response::Actions> {
-        RequestBuilder::new(self.domgr, "actions")
+    pub fn actions(&'a self) -> RequestBuilder<'a, 't, response::Actions> {
+        let url = self.domgr.endpoint_url.clone().join("actions").unwrap();
+        self.domgr.request_builder(Method::GET, url)
     }
 }
 

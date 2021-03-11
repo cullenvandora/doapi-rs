@@ -10,8 +10,11 @@ pub mod request;
 pub mod response;
 
 pub use domanager::DoManager;
-//pub use request::RequestBuilder;
 pub use request::DoRequest;
+pub use request::RequestBuilder;
+pub(crate) use utilities::Extend;
+
+mod utilities;
 
 #[cfg(test)]
 pub(crate) mod tests {

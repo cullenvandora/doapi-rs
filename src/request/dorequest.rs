@@ -49,6 +49,7 @@ where
         }
     }
 
+    //TODO Need to deal with empty respones for actions...
     fn retrieve_obj(&self, obj: String) -> Result<T, String> {
         match self.retrieve_json() {
             Ok(s) => match serde_json::from_str::<Value>(&s) {

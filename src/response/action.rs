@@ -25,16 +25,16 @@ use crate::response::{self, region::Region, NamedResponse};
 
 #[derive(Deserialize, Debug)]
 pub struct Action {
-    id: f64,
-    status: String,
+    pub id: f64,
+    pub status: String,
     #[serde(rename = "type")]
-    action_type: String,
-    started_at: String,
-    completed_at: Option<String>,
-    resource_id: f64,
-    resource_type: String,
-    region: Region,
-    region_slug: Option<String>,
+    pub action_type: String,
+    pub started_at: String,
+    pub completed_at: Option<String>,
+    pub resource_id: f64,
+    pub resource_type: String,
+    pub region: Region,
+    pub region_slug: Option<String>,
 }
 
 impl response::NotArray for Action {}
